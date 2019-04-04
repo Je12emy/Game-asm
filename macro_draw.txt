@@ -1,0 +1,30 @@
+setup() macro
+    mov ah, 0   ; set display mode function.
+    mov al, 13h ; mode 13h = 320x200 pixels, 256 colors.
+    int 10h     ; set it
+endm	
+
+
+draw_horizontal_line() macro x,y, length, color
+    loop_dibujo_horizontal:
+    
+    drawpixel() x,y,color
+    inc x
+    dec length   
+    jnz loop_dibujo_horizontal
+endm
+draw_vertical_line() macro x,y, length, color
+    loop_dibujo_vertical:
+    
+    drawpixel() x,y,color
+    inc y
+    dec length   
+    jnz loop_dibujo_vertical
+endm
+drawpixel() macro x,y,color
+    mov cx, x   ; column
+    mov dx, y   ; row
+    mov al, color  ; white
+    mov ah, 0ch ; put pixel
+    int 10h
+endm
