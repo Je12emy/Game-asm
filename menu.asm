@@ -197,7 +197,7 @@ setup() proc
     MOV AL,12H
     INT 10H
     
-    call readkey() 
+    ;call readkey() 
                             ;Parametros basicos para dibujo
     mov x,01h
     mov y,01h
