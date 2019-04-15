@@ -1,6 +1,6 @@
 setup() macro
     mov ah, 0   ; set display mode function.
-    mov al, 13h ; mode 13h = 320x200 pixels, 256 colors.
+    mov AL,12h  ; mode 13h = 320x200 pixels, 256 colors.
     int 10h     ; set it
 endm	
 
