@@ -7,7 +7,12 @@
     color db "$" 
     grosor db "$"
     fondo db "$"
-.code    
+.code
+     
+    mov ax,@data
+    mov ds,ax
+
+   
     MOV AH,00
     MOV AL,12H
     INT 10H
@@ -24,9 +29,9 @@
     call setup()
            
                     
-dibujar_top_line:                   ;Dibujo de la linea superior
-    mov x,50h
-    mov  length,0027Fh
+dibujar_top_line:
+    mov length,0Fh                   ;Dibujo de la linea superior
+    mov x,70h
     call draw_horizontal_top_line()
     inc y                      
     dec grosor
@@ -86,7 +91,8 @@ setup() proc
                             ;Parametros basicos para dibujo
     mov x,70h
     mov y,50h
-    mov length,000Ah
+    mov length,0Fh
+    
     mov color,00Fh
     mov grosor,0bh
 ;    mov fondo,04h    
