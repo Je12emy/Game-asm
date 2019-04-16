@@ -1,7 +1,7 @@
 .MODEL SMALL
 .STACK 100H
 .DATA
-
+    ;Prueba de GitHub
     iniciar db "[1] INICIAR EL JUEGO.$"
     marcador db "[2] VER MARCADORES.$"
     salir db   "[3] SALIR.$"
