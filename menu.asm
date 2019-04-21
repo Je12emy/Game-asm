@@ -1,3 +1,7 @@
+ include marco.asm    
+ include carriles.asm 
+ include carretera.asm
+ 
 .MODEL SMALL
 .STACK 100H
 .DATA
@@ -10,7 +14,11 @@
     precione db "[PRECIONE UNA TECLA]$"
     puntero db ":"
     x dw "$"
-    y dw "$"
+    y dw "$" 
+    
+    xx dw ?
+    yy dw ?
+
     length dw "$"
     color db "$" 
     grosor db "$"
@@ -25,71 +33,26 @@ inicio:
      
 programa: 
        
-    
-    call setup()
-           
-                    
-dibujar_top_line:                   ;Dibujo de la linea superior
-    mov x,00h
-    mov  length,0027Fh
-    call draw_horizontal_top_line()
-    inc y                      
-    dec grosor
-    jnz dibujar_top_line
-    
-                                    ;Preparacion para dubujar la linea inferior
     mov grosor,03h
-    mov x,00h
-    mov y,01DFH 
-    
-dibujar_bot_line:                   ;Dibujo de la linea infierior
-    mov  x,00h
-    mov  length,0027Fh
-    call draw_horizontal_bot_line()
-    dec y                      
-    dec grosor
-    jnz dibujar_bot_line
-    
-    mov grosor,03h 
-          
-dibujar_right_line:                 ;Dibujo de la linea derecha
-    mov y,01E0H 
-    mov length,1E0H
-    call draw_vertical_right_line()
-    dec x                                   
-    dec grosor
-    jnz dibujar_right_line
-
-    mov grosor,03h
-    mov x,00h    
-dibujar_left_line:                  ;Dibujo de la linea izquierda
-    mov y,01E0H 
-    mov length,1E0H
-    call draw_vertical_left_line()
-    inc x                                   
-    dec grosor
-    jnz dibujar_left_line
-            
-                                    ;Escribir los mensajes del menu
+    MOV AH,00
+    MOV AL,12H
+    INT 10H 
+    marco_juego x,y,length, grosor
+                      
+                            ;Escribir los mensajes del menu
       
       
 opciones:    
     mov dx,0D1Bh            ;DL: X, DH: Y
     mov ah,02h
-    ;mov bh,00h
+
+
     int 10h
     
     lea dx,inicio
     mov ah,09h 
     int 21h
-    
-            
-;    mov dx,0E15h            ;DL: X, DH: Y
-;    mov ah,02h
-;    mov bh,00h
-;    int 10h
-                 
-    
+        
     mov dx,0F1Bh            ;DL: X, DH: Y
     mov ah,02h
     mov bh,00h
@@ -120,9 +83,47 @@ opciones:
     
     call readkey()
     call comparar
-    
+     
+     
+     
+     
     juego:
     
+    
+
+    MOV AH,00
+    MOV AL,12H
+    INT 10H 
+    
+    mov grosor,03h
+    marco_juego x,y,length, grosor
+    
+    
+    PALETA 02H
+     
+    mov xx, 10
+    mov yy, 10
+    mov x, 155
+    mov y,10  
+     
+        
+    BORDER
+       
+    FONDO 
+   
+    mov xx,1h
+    mov yy,1h   
+
+    mov x,13Eh
+    mov y,10h
+
+                 
+    LINEASALTEADA x,y,xx,yy
+   
+   
+        
+        
+    call readkey()
     
     
 halt:
@@ -132,6 +133,7 @@ halt:
 comparar proc
 mayor1:    
     cmp al,31H
+    je juego
     jge menor3 
     jmp erroneo   
 
@@ -190,81 +192,4 @@ goto() proc
     mov dh,40h             ;Columna
     int 10h
     ret
-endp    
-setup() proc
-                            ;Preparacion de la pantalla
-    MOV AH,00
-    MOV AL,12H
-    INT 10H
-    
-    ;call readkey() 
-                            ;Parametros basicos para dibujo
-    mov x,01h
-    mov y,01h
-    mov length,0027Fh
-    mov color,00Fh
-    mov grosor,03h
-    mov fondo,04h
-    ;call setColor()
-    ret
-endp
-setColor() proc
-    MOV AH,0BH
-    MOV BH,00H            
-    MOV BL,fondo
-    INT 10H
-    ret
-endp
-
-
-
-draw_horizontal_top_line() proc 
-    loop_dibujo_top:
-    
-    call drawpixel()
-    inc x
-    dec length   
-    jnz loop_dibujo_top
-    ret
-endp 
-
-
-draw_horizontal_bot_line() proc 
-    loop_dibujo_bot:
-    
-    call drawpixel()
-    inc x
-    dec length   
-    jnz loop_dibujo_bot
-    ret
-endp
-
-draw_vertical_right_line() proc
-    loop_dibujo_right:
-    
-    call drawpixel()
-    dec y                               ;Arriba
-    dec length
-    jnz loop_dibujo_right
-    ret
-endp
-
-draw_vertical_left_line() proc
-    loop_dibujo_left:
-    
-    call drawpixel()
-    dec y                               ;Arriba
-    dec length
-    jnz loop_dibujo_left
-    ret
-endp
-
-drawpixel() proc
-    mov cx, x   ; column
-    mov dx, y   ; row
-    mov al, color  ; white
-    mov ah, 0ch ; put pixel
-    int 10h
-    ret
-endp
-         
+endp       
