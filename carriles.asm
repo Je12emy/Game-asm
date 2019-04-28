@@ -29,7 +29,7 @@ ENDM
 
 LINEASALTEADA MACRO X,Y,XX,YY
      
-                LOCAL   AMARILLO,MOVAMARILLO,NEGRO,MOVNEGRO,SEGUNDALINEA,SALIR
+                LOCAL   AMARILLO,MOVAMARILLO,SEGUNDALINEA,SALIR
                               
 AMARILLO:   
                 MOV     CX,0020       
@@ -46,23 +46,7 @@ MOVAMARILLO:    push    cx
                 JE      SEGUNDALINEA
                 MOV     y,AX
                 LOOP    MOVAMARILLO
-                
-NEGRO:   
-                MOV     CX,0020       
-MOVNEGRO:       
-                push    cx
-                PUNTO   xx,yy,00h
-                pop     cx 
-                
-                MOV     AX,y
-                MOV     yy,AX       ;Guardamos posicion anterior
-                mov     bx,x        ;X lo movemos a XX
-                MOV     xx,bx
-                INC     AX
-                CMP     AX,460
-                JE      SALIR
-                MOV     y,AX
-                LOOP    MOVNEGRO
+                ADD     Y,20
                 JMP     AMARILLO              
 
 SEGUNDALINEA:
@@ -87,7 +71,7 @@ ENDM
 ;        mov ax,@data
 ;        mov ds,ax
 ; 
-;        GRAPH           ;Seteamos modo gr·fico 640*480
+;        GRAPH           ;Seteamos modo gr√°fico 640*480
 ;        
 ;        LINEASALTEADA X,Y,XX,YY
 ;
