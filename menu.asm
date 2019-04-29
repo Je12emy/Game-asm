@@ -1,6 +1,7 @@
  include marco.asm    
  include carriles.asm 
  include carretera.asm
+ include write.asm
  
 ;Macros especiales para los personajes del juego
 
@@ -123,7 +124,16 @@ ENDM
     MEN1    DB 'GAME OVER','$' 
                
     NUMERO      DW 0 
-    VELOCIDAD   DW 0FFFH
+    VELOCIDAD   DW 0FFFH 
+    
+    ;Parametros para write
+    
+     EntradaDelFichero       DB    13,10,"INTRODUCE EL NOMBRE DEL FICHERO: $"
+     MensajeDeMostramosError DB    13,10," MostramosError.Mira si has escrito bien el fichero ***",13,10,10,"$"
+     GuardarEntradaTeclado   DB    80 DUP (0)   ; BufferLeerDisco para leer desde el teclado
+     BufferLeerDisco         DB    2000 DUP (0) ;   "     "     "     "  el disco
+     texto db 50,0,"prueba"
+     newl                    DB    13,10
 
 .CODE
 

@@ -194,7 +194,7 @@ endm
 ;         JNE   CerramosElFichero
 ;         MOV   AH,4CH                           ; sí: CerramosElFicherolo
 ;         INT   21H                              ; Y fin del programa
-end         
+;end         
         
     
       
