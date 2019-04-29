@@ -824,18 +824,32 @@ GAMEOVER:
 ;	    mov al,unidades_2
 ;	    stosb
 ;	    
-;	    
-;	    mov ah,02h
-;	    mov al,13h
-;	    int 10h
-;	    
+;	
+ 
+
+
+    
+	    mov ah,00h
+	    mov al,12h
+	    int 10h
+	    
+	    mov ah,02h
+        mov dh,02
+        mov dl,02h
+        int 10h
+        
+        LEA     DX,MEN1
+        MOV	    AH,9
+        INT     21H
+	    	    
+	    
+	    mov ah,02h
+        mov dh,05
+        mov dl,07
+        int 10h	    
 	    
         call capturar_name
-        
-        mov ah,02h
-        mov dh,07
-        mov dl,06
-        int 10h
+       
         
         xor ax,ax
         
@@ -852,17 +866,15 @@ GAMEOVER:
         mov al,unidades_2
         mov [score_over+9], al
         
+        mov ah,02h
+        mov dh,05
+        mov dl,07
+        int 10h
+        
         escribir ContieneHandle,EntradaDelFichero,MensajeDeMostramosError, GuardarEntradaTeclado, BufferLeerDisco, newl, score_over 
 
        
-        mov ah,02h
-        mov dh,07
-        mov dl,05
-        int 10h
-        
-        LEA     DX,MEN1
-        MOV	    AH,9
-        INT     21H 
+
         
         ;**********
         ;mov ah,00h
