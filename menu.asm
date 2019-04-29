@@ -139,14 +139,22 @@ ENDM
     unidades_2 db 00
     
     unidades_1_decimas db 00
-    unidades_1_unidades db 00
+    unidades_1_unidades db 00          
     
+     score_over db "$"             ;Arreglo de numeros
+             db "$"
+             db "$"
+             db "$"
+             db "$"
+             db "$"
+             db "$"
+             db "$"
+             db "$"
     
-    
-    
+    final_score   db     50,0,50 dup (0aah)  
     
     ;Parametros para write
-    
+     ContieneHandle          DW    0        ; ContieneHandle de control del fichero
      EntradaDelFichero       DB    13,10,"INTRODUCE EL NOMBRE DEL FICHERO: $"
      MensajeDeMostramosError DB    13,10," MostramosError.Mira si has escrito bien el fichero ***",13,10,10,"$"
      GuardarEntradaTeclado   DB    80 DUP (0)   ; BufferLeerDisco para leer desde el teclado
@@ -222,7 +230,7 @@ opciones:
 
     MOV AH,00
     MOV AL,12H
-    INT 10H 
+    INT 10H        
     
     mov grosor,03h
     marco_juego x,y,length, grosor
@@ -481,6 +489,67 @@ RIGHT:
         JMP     check_mouse_buttons  
 
 GAMEOVER:
+
+        ;    decimas db 00
+;    unidades db 00 
+;    decimas_1 db 00
+;    decimas_2 db 00
+;    unidades_1 db 00
+;    unidades_2 db 00
+;    
+;    unidades_1_decimas db 00
+;    unidades_1_unidades db 00 
+
+        
+ ;       cld                     ; Activa DF para conteo ascendente en SI-DI
+;	    ;mov si,offset cadena1 + 1
+;	    ;lodsb				;extrae el byte con la cantidad de letras leidas desde el KB => AL
+;	
+;	    mov ah,00h
+;	    mov di,offset final_score+ 2  ; DI contiene el inicio de la palabra
+;	
+;	    add di,00h             ;se suma al inicio de la palabra digitada
+;		                   ; se tiene ahora apuntando DI al final de la palabra
+;	    mov al,decimas_1
+;	    stosb           
+;	    
+;	    mov al,decimas_2
+;	    stosb
+;	    
+;	    mov al,unidades_1_decimas
+;	    stosb 
+;
+;	    mov al,unidades_1_unidades
+;	    stosb
+;	    
+;	    mov al,unidades_2
+;	    stosb
+;	    
+;	    
+;	    mov ah,02h
+;	    mov al,13h
+;	    int 10h
+;	    
+	    
+        
+        
+        xor ax,ax
+        
+        mov ah,decimas_1
+        mov al,decimas_2
+        mov [score_over], ah
+        mov [score_over+1],al
+        
+        mov ah,unidades_1_decimas
+        mov al,unidades_1_unidades
+        mov [score_over+2],ah
+        mov [score_over+3],al
+        
+        mov al,unidades_2
+        mov [score_over+4], al
+        
+        escribir ContieneHandle,EntradaDelFichero,MensajeDeMostramosError, GuardarEntradaTeclado, BufferLeerDisco, newl,score_over 
+
        
         mov ah,02h
         mov dh,07
