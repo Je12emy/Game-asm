@@ -96,6 +96,7 @@ ENDM
     precione db "[PRECIONE UNA TECLA]$"
     puntero db ":"
     
+    ;Parametros genericos
     x dw "$"
     y dw "$" 
     
@@ -108,12 +109,14 @@ ENDM
     fondo db "$"
     ENTER   DB      0AH,0DH,'$'
     
-    
+   
     ;xx      dw 1
     ;yy      dw 1
         
     XAUX    DW 0
-    YAUX    DW 0
+    YAUX    DW 0   
+    
+    ;Parametros para los carros.
         
     ;X       dw 319
     ;Y       dw 10  
@@ -124,7 +127,23 @@ ENDM
     MEN1    DB 'GAME OVER','$' 
                
     NUMERO      DW 0 
-    VELOCIDAD   DW 0FFFH 
+    VELOCIDAD   DW 0FFFH  
+    
+    ;Parametro de score
+    score dw 0000
+    decimas db 00
+    unidades db 00 
+    decimas_1 db 00
+    decimas_2 db 00
+    unidades_1 db 00
+    unidades_2 db 00
+    
+    unidades_1_decimas db 00
+    unidades_1_unidades db 00
+    
+    
+    
+    
     
     ;Parametros para write
     
@@ -231,7 +250,9 @@ opciones:
     LINEASALTEADA x,y,xx,yy
     
     ;Dibujo de los personajes de juego.
-    
+        mov score,00h
+        
+        
         MOV X,319
         MOV Y,10
         
@@ -260,6 +281,7 @@ opciones:
         int     33h
         
 check_mouse_buttons:
+
         
         MOV     DX,Y
         ADD     DX,20
@@ -271,7 +293,120 @@ check_mouse_buttons:
         CMP     YCAR,DX
         JE      VALIDARXXL       
 
-SEGUIR:                                                
+SEGUIR:
+        ;********* 
+        inc score
+                
+;        mov ah,00h
+;        mov al,score
+;        aam
+        
+        mov ax,score
+        ;aam
+        
+        mov decimas,ah
+        mov unidades,al
+                
+        ;Imprimir decimas
+        xor ax,ax
+        mov al,decimas
+        aam                     ;Convertir decimas a bcd
+        
+        mov decimas_1, ah
+        mov decimas_2, al       
+        
+        mov ah,02h
+        mov dh,05
+        mov dl,06
+        int 10h
+        
+        add decimas_1,30h
+        mov dl,decimas_1
+        mov ah,02h
+        int 21h
+        
+        mov ah,02h
+        mov dh,05
+        mov dl,07
+        int 10h
+        
+        add decimas_2,30h
+        mov dl,decimas_2
+        mov ah,02h
+        int 21h       
+        
+        ;Imprimir unidades
+        
+        xor ax,ax
+        mov ah,00h
+        mov al,unidades
+        aam
+        
+        mov unidades_1, ah
+        mov unidades_2, al       
+        
+        ;Descomponer a unidades_1 con aam
+        xor ax,ax
+        mov al,unidades_1
+        aam
+        
+        mov unidades_1_decimas,ah
+        mov unidades_1_unidades,al
+              
+        
+        mov ah,02h
+        mov dh,05
+        mov dl,08
+        int 10h
+        
+        add unidades_1_decimas,30h
+        mov dl,unidades_1_decimas
+        mov ah,02h
+        int 21h 
+        
+        mov ah,02h
+        mov dh,05
+        mov dl,09
+        int 10h
+        
+        add unidades_1_unidades,30h
+        mov dl,unidades_1_unidades
+        mov ah,02h
+        int 21h
+        
+        
+        
+;******************        
+        
+        mov ah,02h
+        mov dh,05
+        mov dl,0Ah
+        int 10h
+        
+        
+        add unidades_2,30h
+        mov dl,unidades_2
+        mov ah,02h
+        int 21h     
+        
+        
+;        mov ah,02h
+;        mov dh,05
+;        mov dl,07
+;        int 10h
+;        
+;        mov dl,unidades
+;        mov ah,02h
+;        int 21h
+               
+        
+        
+        
+        
+        
+        ;*********
+        
+                                                       
         mov     ax, 3
         int     33h        
         
@@ -298,8 +433,8 @@ SEGUIR:
         JE      VOLVERINICIO 
         
         CMP     YY,460
-        JE      VOLVERINICIO2 
-                                                
+        JE      VOLVERINICIO2
+                                                       
         jmp check_mouse_buttons
 
 VALIDARXL:
@@ -346,13 +481,26 @@ RIGHT:
         JMP     check_mouse_buttons  
 
 GAMEOVER:
-
+       
+        mov ah,02h
+        mov dh,07
+        mov dl,05
+        int 10h
+        
         LEA     DX,MEN1
         MOV	    AH,9
         INT     21H
-    
+        ;**********
+        ;mov ah,00h
+;        mov al,score
+;        aam
+;        
+;        mov dl,al
+;        mov ah,02h
+;        int 21h
+        ;**********
             
-    call readkey()
+        call readkey()
     
     
 HALT:        
