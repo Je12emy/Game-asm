@@ -55,7 +55,7 @@ escribir macro ContieneHandle,EntradaDelFichero,MensajeDeMostramosError, Guardar
 
    ;LeemosElFichero: 
         MOV   BX,ContieneHandle                 ;Movemos a BX el handle contenido en Contiene Hanndle        
-        MOV   CX,06
+        MOV   CX,10
                                                 ;100 será el número de bytes a leer
    ;LEA   DX,BufferLeerDisco                    ;dirección del BufferLeerDisco
         LEA   DX,score
