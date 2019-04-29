@@ -551,7 +551,7 @@ opciones:
     mov yy,1h   
 
     mov x,13Eh
-    mov y,10h
+    mov y,10
 
                  
     LINEASALTEADA x,y,xx,yy
